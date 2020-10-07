@@ -27,14 +27,14 @@ void *sender(void *arg) {
     	count++;
     	printf("%08lX: Increment count: count=%d\n", pthread_self(), count);
     	if (count == 3) {
-		pthread_mutex_lock(&m); // Question 2.2
-  		pthread_mutex_unlock(&m); // Question 2.2
+    		pthread_mutex_lock(&m); // Question 2.2
+  	    	pthread_mutex_unlock(&m); // Question 2.2
     	    //pthread_cond_signal(&c); // Initially
-		pthread_cond_broadcast(&c); // Question 2.3
-		for(int i = 0; i < 3; i = i + 1) { // Question 2.3
-			sem_wait(&s);
-		}
+		    pthread_cond_broadcast(&c); // Question 2.3
         	printf("%08lX: Sent signal. count=%d\n", pthread_self(), count);
+		    for(int i = 0; i < 3; i = i + 1) { // Question 2.3
+	    		sem_wait(&s);
+    		}
         }
     }
     return NULL;
