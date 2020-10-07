@@ -101,12 +101,12 @@ static sem_t s; // Question 2.3
     sleep(1); // Question 2.1
     sem_post(&s); // Question 2.3
     pthread_cond_wait(&c, &m);
-    sem_post(&s);
+    sem_post(&s); // Question 2.3
     printf("%08lX: Received signal. count=%d\n", pthread_self(), count);
     pthread_mutex_unlock(&m); // Question 2.3
 ```
 
-- We add two loops in order to wait three semaphores post and to synchronise the sent and recieved signals (inside the **sender thread** and inside the **if loop of sender thread** ).
+- We add two loops in order to wait three semaphores post and to synchronise the sent and received signals (inside the **sender thread** and inside the **if loop of sender thread** ).
 ```c
 	for(int i = 0; i < 3; i = i + 1) { // Question 2.3
 		sem_wait(&s);
@@ -224,6 +224,10 @@ char* cir_read(cir_buf_t *c) {
 ```
 
 The idea is to lock the circular buffer when it is used (for writing or reading). If the wished action is unavailable, the thread waits until the action is available.
+
+We wrote the same two functions to measure the difference of efficiency between signals and semaphores.
+
+***Conclusion? Launch `$./ex3`*** 
 
 ## Related Documents
 
