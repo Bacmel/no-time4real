@@ -2,7 +2,7 @@
 #include <wiringPiI2C.h>
 #include <stdio.h>
 
-#define IR 0x004 // A0
+#define IR 0x0004 // A0
 
 int main(void) {
 	//init
