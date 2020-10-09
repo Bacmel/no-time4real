@@ -1,5 +1,5 @@
 FLAGS = $(shell pkg-config --cflags opencv)
-LIBS = $(shell pkg-config --libs opencv) -lm
+LIBS = $(shell pkg-config --libs opencv) -lm -lWiringPi
 
-all: oc_camera.c
-	gcc $(FLAGS) oc_camera.c -o test $(LIBS)
+all: i2c.c
+	gcc $(FLAGS) @< -o test $(LIBS)

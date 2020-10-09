@@ -2,15 +2,14 @@
 #include <wiringPiI2C.h>
 #include <stdio.h>
 
-#define IR 0x0004 // A0
+#define devId 0x04
 
 int main(void) {
 	//init
-    wiringPiI2CSetup(IR);
-    int reg;
+    int fd =  wiringPiI2CSetup(devId);
+    int reg = 3;
 	while(1) { //loop
-        wiringPiI2CReadReg16(IR, reg);
-		printf("%d\n", reg);
+		printf("%d\n", wiringPiI2CReadReg16(fd, reg));
 	}
 	return 0;
 }
