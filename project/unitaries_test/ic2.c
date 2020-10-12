@@ -7,7 +7,7 @@
 int main(void) {
 	//init
     int fd =  wiringPiI2CSetup(devId);
-    int reg = 3;
+    int reg = 0x31;
 	while(1) { //loop
 		printf("%d\n", wiringPiI2CReadReg16(fd, reg));
 	}
