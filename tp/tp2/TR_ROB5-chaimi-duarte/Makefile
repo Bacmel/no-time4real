@@ -1,4 +1,4 @@
-obj-m := module1.o  
+obj-m := module1.o  char.o
 KDIR := /lib/modules/$(shell uname -r)/build
 
 default:
