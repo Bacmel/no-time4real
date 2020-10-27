@@ -8,7 +8,7 @@
 //#include <asm/uaccess.h> // Initially
 #include <linux/fs.h>
 #include <linux/sched.h>
-#include <linux/cdev.h>  
+#include <linux/cdev.h>
 #include <linux/device.h>         // Header to support the kernel Driver Model
 
 #define  DEVICE_NAME "mychar"    ///< The device will appear at /dev/mychar using this value

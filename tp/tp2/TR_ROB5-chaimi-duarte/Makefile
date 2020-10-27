@@ -1,3 +1,5 @@
+CONFIG_MODULE_SIG=n
+
 obj-m := module1.o  char.o
 KDIR := /lib/modules/$(shell uname -r)/build
 
