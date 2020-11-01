@@ -106,4 +106,27 @@ write(fd, buff, strln(buff));
 read(fd, buff2, strln(buff2);
 close(fd);
  ```
-  
+
+### Question 2.9
+We create a static buffer `static char str[MAX]`.
+On the read function :
+```
+  if(count > MAX) {
+    return -EINVAL;
+  }
+  if(copy_to_user(buf, str, MAX)!=0) {
+    printk("copy_to_user failed\n");
+  }
+  printk("copy_to_user succed");
+```
+On the write function :
+```
+  if(count > MAX) {
+    return -EINVAL;
+  }
+  if(copy_from_user(str, buf, MAX)!=0) {
+    printk("copy_to_user failed\n");
+  }
+  printk("copy_to_user succed");
+```
+
