@@ -5,49 +5,63 @@
 #include <linux/module.h>	/* modules */
 #include <linux/init.h>		/* module_{init,exit}() */
 #include <linux/slab.h>		/* kmalloc()/kfree() */
-//#include <asm/uaccess.h> // Initially
+#include <linux/uaccess.h>
 #include <linux/fs.h>
 #include <linux/sched.h>
-#include <linux/cdev.h>
+#include <linux/cdev.h>  
 #include <linux/device.h>         // Header to support the kernel Driver Model
 
-#define  DEVICE_NAME "mychar"    ///< The device will appear at /dev/mychar using this value
-#define  CLASS_NAME  "mychar"        ///< The device class -- this is a character device driv
+#define DEVICE_NAME "mychar"    ///< The device will appear at /dev/mychar using this value
+#define CLASS_NAME  "mychar"        ///< The device class -- this is a character device driv
+#define MAX 100
 
 static struct class*  charClass  = NULL; ///< The device-driver class struct pointer
 static struct device* charDevice = NULL; ///< The device-driver device struct pointer
+static char str[MAX];
 
 int major;
-
 
 /*
  * File operations
  */
-static ssize_t char_read(struct file *file, char *buf, size_t count, 
-  loff_t *ppos)
+static ssize_t char_read(struct file *file, char *buf, size_t count,loff_t *ppos)
 {
-  printk("Execution of char_read\n"); // Question 2.6
+  printk("je suis dans read \n");
+  if(count > MAX) {
+    return -EINVAL;
+  }
+  if(copy_to_user(buf, str, MAX)!=0) {
+    printk("copy_to_user failed\n");
+  }
+  printk("copy_to_user succed");
   return count;
 }
-static ssize_t char_write(struct file *file, const char *buf, size_t count,
-   loff_t *ppos)
+static ssize_t char_write(struct file *file, const char *buf, size_t count,loff_t *ppos)
 {
-  printk("Execution of char_write\n"); // Question 2.6
+  
+  printk("je suis dans write \n");
+  if(count > MAX) {
+    return -EINVAL;
+  }
+  if(copy_from_user(str, buf, MAX)!=0) {
+    printk("copy_to_user failed\n");
+  }
+  printk("copy_to_user succed");
   return 0;
 }
 static int char_open(struct inode *inode, struct file *file)
 {
-  printk("Execution of char_open\n"); // Question 2.6
+  printk("je suis dans open \n");
   return 0;
 }
 static int char_release(struct inode *inode, struct file *file)
 {
-  printk("Execution of char_release\n"); // Question 2.6
+  printk("je suis dans release \n");
   return 0;
 }
 static long char_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
-  printk("Execution of char_ioctl\n"); // Question 2.6
+  printk("je suis dans ioctl \n");
   return 0;
 }
 static struct file_operations char_fops = {
