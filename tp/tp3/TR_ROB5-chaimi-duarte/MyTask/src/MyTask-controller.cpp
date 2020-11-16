@@ -19,7 +19,7 @@ Controller::Controller(std::string const& name) : TaskContext(name){
   in.data =0.0 ;
   out.data =0.0;
 
-  this->ports()->addPort( "mes", mes ).doc( "Mesure" );
+  this->ports()->addEventPort( mes ).doc( "Event Mesure" );
   this->ports()->addPort( "cmd", cmd ).doc( "Commande" );
   this->addAttribute( "des", des);
 
@@ -43,7 +43,7 @@ Controller::Controller(std::string const& name) : TaskContext(name){
   double Te = this->getPeriod();
   double de;
 
-  while (mes.read(in)){
+  if(e_mes.read(in)){
     std::cout<< "mes="<<in.data <<std::endl;
     e = des-in.data;
     err_tot += e*Te;
@@ -58,7 +58,6 @@ Controller::Controller(std::string const& name) : TaskContext(name){
     err_pre=e;
     cmd.write(out);
   }
-
  }
 
  void Controller::stopHook() {
@@ -99,7 +98,7 @@ Moteur::Moteur(std::string const& name) : TaskContext(name){
   in.data=0.0;
   out.data=0.0;
 
-  this->ports()->addPort( "cmd", cmd ).doc( "Commande" );
+  this->ports()->addEventPort( e_cmd ).doc( "Event Commande" );
   this->ports()->addPort( "pos", pos ).doc( "Position" );
 
  }
@@ -130,7 +129,7 @@ void Moteur::updateHook(){
   double ni;
   double nv;
   double Te= this->getPeriod();
-  while (cmd.read(in)){
+  while (e_cmd.read(in)){
     std::cout<< "cmd="<<in.data<<std::endl;
     ni = a11*i+a12*v+b1*in.data;
     nv = a21*i+a22*v+b2*in.data;

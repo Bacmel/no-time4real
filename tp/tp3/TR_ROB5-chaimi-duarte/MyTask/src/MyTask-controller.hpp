@@ -26,7 +26,7 @@ class Controller : public RTT::TaskContext{
   public:
     double des;
     // Input port
-    RTT::InputPort<std_msgs::Float64> mes;
+    RTT::InputPort<std_msgs::Float64> e_mes;
     // Output ports
     RTT::OutputPort<std_msgs::Float64> cmd;
     Controller(std::string const& name);
@@ -57,7 +57,7 @@ private:
   std_msgs::Float64 out;
   std_msgs::Float64 in;
 public:
-  RTT::InputPort<std_msgs::Float64> cmd;
+  RTT::InputPort<std_msgs::Float64> e_cmd;
   // Output ports
   RTT::OutputPort<std_msgs::Float64> pos;
   Moteur(std::string const& name);
