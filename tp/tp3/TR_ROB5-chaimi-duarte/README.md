@@ -184,7 +184,7 @@ To run the code we need to load the **startC.ops** script in the deployer
 
 ### Question 2.9
 
-In order to read the messages in ROS we need to use std_mgs::Float64 type for our input and output ports. Moreover we need to add some dependencies in our **.xml** file 
+In order to read the messages in ROS we need to use std_mgs::Float64 type for our input and output ports. Moreover we need to add some dependencies in our **package.xml** 
 ```
   <build_depend>rtt_ros</build_depend>
   <build_depend>std_msgs</build_depend>
