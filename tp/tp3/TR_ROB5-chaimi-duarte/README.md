@@ -138,7 +138,23 @@ The first component we define is the **Controller**. It has :
 
 Inside the *updateHook* is define the **PID** function :
 ```cpp
-// Copy from code
+ void Controller::updateHook(){
+  ...
+  while (mes.read(in)){
+    std::cout<< "mes="<<in.data <<std::endl;
+    e = des-in.data;
+    err_tot += e*Te;
+    if(err_tot > max) {
+      err_tot = max;
+    }else if(err_tot < max){
+      err_tot = -max;
+
+    }
+    de = (e-err_pre)/Te;
+    out.data = Kp*e+Ki*err_tot+Kd*de;
+    err_pre=e;
+    cmd.write(out);
+    ...
 ```
 
 The second component we define is the **Moteur**. It has :
@@ -147,9 +163,22 @@ The second component we define is the **Moteur**. It has :
 - A `public OutputPort<double>` pos ;
 - And all the constants and variable to implement a **DCM**.
 
-Inside the *updateHook* is define the **PID** function :
+Inside the *updateHook* is define the **DCM** function :
 ```cpp
-// Copy from code
+void Moteur::updateHook(){
+  ...
+  while (cmd.read(in)){
+    std::cout<< "cmd="<<in.data<<std::endl;
+    ni = a11*i+a12*v+b1*in.data;
+    nv = a21*i+a22*v+b2*in.data;
+    p.data += nv*Te;
+    i = ni;
+    v = nv;
+    out.data=p.data;
+    pos.write(out);
+    std::cout<< "position="<<p<<std::endl;
+  }
+  ...
 ```
 
 ### Question 2.9
