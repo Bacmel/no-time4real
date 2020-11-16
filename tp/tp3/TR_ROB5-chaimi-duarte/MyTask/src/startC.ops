@@ -1,0 +1,31 @@
+import("MyTask")
+
+import("rtt_ros")
+
+import("rtt_std_msgs")
+
+import("rtt_roscomm")
+
+import("rtt_rosnode")
+
+loadComponent("moteur", "Moteur")
+
+loadComponent("controller", "Controller")
+
+connect("controller.cmd", "moteur.cmd", ConnPolicy())
+
+connect("moteur.pos", "controller.mes", ConnPolicy())
+
+controller.des = 1.57
+
+moteur.configure()
+
+controller.configure()
+
+moteur.start()
+
+controller.start()
+
+
+
+
