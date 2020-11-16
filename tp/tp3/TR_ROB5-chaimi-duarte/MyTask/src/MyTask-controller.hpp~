@@ -53,7 +53,7 @@ private:
   // attribut
   double i;
   double v;
-  double p;
+  std_msgs::Float64 p;
   std_msgs::Float64 out;
   std_msgs::Float64 in;
 public:

@@ -20,8 +20,7 @@ class Controller : public RTT::TaskContext{
   // variable
   double err_tot;
   double err_pre;
-  std_msgs::Float64 out;
-  std_msgs::Float64 in;
+
 
   public:
     double des;
@@ -54,8 +53,7 @@ private:
   double i;
   double v;
   std_msgs::Float64 p;
-  std_msgs::Float64 out;
-  std_msgs::Float64 in;
+
 public:
   RTT::InputPort<std_msgs::Float64> e_cmd;
   // Output ports

@@ -12,11 +12,17 @@ loadComponent("moteur", "Moteur")
 
 loadComponent("controller", "Controller")
 
-connect("controller.cmd", "moteur.cmd", ConnPolicy())
+moteur.setPeriod(0.1)
 
-connect("moteur.pos", "controller.mes", ConnPolicy())
+controller.setPeriod(0.1)
 
-controller.des = 1.57
+stream("moteur.pos", ros.comm.topic("/position"))
+
+stream("controller.cmd", ros.comm.topic("/commande"))
+
+connect("controller.cmd", "moteur.e_cmd", ConnPolicy())
+
+connect("moteur.pos", "controller.e_mes", ConnPolicy())
 
 moteur.configure()
 

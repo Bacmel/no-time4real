@@ -6,20 +6,10 @@ using namespace RTT;
 using namespace Orocos;
 
 
-Controller::Controller(std::string const& name) : TaskContext(name){
-  std::cout << "Controller constructed !" <<std::endl;
-  // constante
-  Kp = 1;
-  Ki =0;
-  max=0;
-  Kd=0;
-  // variable
-  err_tot=0;
-  err_pre=0;
-  in.data =0.0 ;
-  out.data =0.0;
+Controller::Controller(std::string const& name) : TaskContext(name),Kp(0.4),Ki(0.4),max(100),Kd(0.2),err_tot(0.0),err_pre(0.0),e_mes("e_mes"),cmd("cmd"),des(1.57){
 
-  this->ports()->addEventPort( mes ).doc( "Event Mesure" );
+  std::cout << "Controller constructed !" <<std::endl;
+  this->ports()->addEventPort( "e_mes",e_mes ).doc( "Event Mesure" );
   this->ports()->addPort( "cmd", cmd ).doc( "Commande" );
   this->addAttribute( "des", des);
 
@@ -42,6 +32,8 @@ Controller::Controller(std::string const& name) : TaskContext(name){
   double e;
   double Te = this->getPeriod();
   double de;
+  std_msgs::Float64 out;
+  std_msgs::Float64 in;
 
   if(e_mes.read(in)){
     std::cout<< "mes="<<in.data <<std::endl;
@@ -56,8 +48,8 @@ Controller::Controller(std::string const& name) : TaskContext(name){
     de = (e-err_pre)/Te;
     out.data = Kp*e+Ki*err_tot+Kd*de;
     err_pre=e;
-    cmd.write(out);
   }
+  cmd.write(out);
  }
 
  void Controller::stopHook() {
@@ -72,17 +64,10 @@ Controller::Controller(std::string const& name) : TaskContext(name){
 
 
 
-Moteur::Moteur(std::string const& name) : TaskContext(name){
+Moteur::Moteur(std::string const& name) : TaskContext(name),Ke(1/(182*(3.14/30))),R(2.03),L(0), Kc(52.5*0.001),J(72.3*0.0000001),f(0.0), i(0.0),v(0.0),e_cmd("e_cmd"),pos("pos"){
+
   std::cout << "Moteur constructed !" <<std::endl;
   double Te = this->getPeriod();
-  // Electrical
-  Ke = 1/(182*(3.14/30)); // V.s.rad^-1
-  R = 2.03; // Ohms
-  L = 0; // Henry
-  // Mechanical
-  Kc = 52.5*0.001; // en N.m.A⁻¹
-  J = 72.3*0.0000001; // en Kg.m²
-  f = 0;
   // Big Constants (Calculs once)
   A = (Ke*Kc+(f+J/Te)*(R+L/Te));
   a11 = ((f+J/Te)*L/Te)/A;
@@ -91,14 +76,7 @@ Moteur::Moteur(std::string const& name) : TaskContext(name){
   a22 = ((R+L/Te)*J/Te)/A;
   b1 = (f+J/Te)/A;
   b2 = Kc/A;
-  // attribut
-  i = 0;
-  v = 0;
-  p.data=0.0;
-  in.data=0.0;
-  out.data=0.0;
-
-  this->ports()->addEventPort( e_cmd ).doc( "Event Commande" );
+  this->ports()->addEventPort("e_cmd", e_cmd ).doc( "Event Commande" );
   this->ports()->addPort( "pos", pos ).doc( "Position" );
 
  }
@@ -113,15 +91,6 @@ bool Moteur::startHook(){
   std::cout << "Moteur started !" <<std::endl;
   log(Info) << "start Hook!" <<endlog();
   // Check validity of (all) Ports:
-  if ( !cmd.connected() ) {
-    std::cout << "No input connection made" <<std::endl;
-    return false;
-  }
-  if ( !pos.connected() ) {
-    std::cout << "No output connection made" <<std::endl;
-    return false;
-  }
-  pos.write(p);
   return true;
  }
 
@@ -129,17 +98,19 @@ void Moteur::updateHook(){
   double ni;
   double nv;
   double Te= this->getPeriod();
-  while (e_cmd.read(in)){
+  std_msgs::Float64 out;
+  std_msgs::Float64 in;
+  if (e_cmd.read(in)){
     std::cout<< "cmd="<<in.data<<std::endl;
     ni = a11*i+a12*v+b1*in.data;
     nv = a21*i+a22*v+b2*in.data;
     p.data += nv*Te;
     i = ni;
     v = nv;
-    out.data=p.data;
-    pos.write(out);
-    std::cout<< "position="<<p<<std::endl;
   }
+  out.data=p.data;
+  pos.write(out);
+  std::cout<< "position="<<p<<std::endl;
 }
 
 void Moteur::stopHook() {

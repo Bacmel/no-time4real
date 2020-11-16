@@ -205,13 +205,20 @@ import("rtt_std_msgs")
 import("rtt_roscomm")
 import("rtt_rosnode")
 ```
-We finally streamall the data we want on specific topics.
+We finally stream all the data we want on specific topics.
 ```
 //topics 
 stream("moteur.pos", ros.comm.topic("/position"))
 stream("controleur.cmd", ros.comm.topic("/commande"))
 ```
-
+To read the data we need to open three new terminal 
+```
+roscore //terminal 1
+```
+```
+rostopic echo /nametopic //terminal 2 and 3
+```
+And finally we run our code.
 ## Related Documents
 
 - [The Orocos Component Builder's Manual](https://www.orocos.org/stable/documentation/rtt/v2.x/doc-xml/orocos-components-manual.html)

@@ -16,8 +16,8 @@ Controller::Controller(std::string const& name) : TaskContext(name){
   // variable
   err_tot=0;
   err_pre=0;
-  in=0;
-  out=0;
+  in.data =0.0 ;
+  out.data =0.0;
 
   this->ports()->addPort( "mes", mes ).doc( "Mesure" );
   this->ports()->addPort( "cmd", cmd ).doc( "Commande" );
@@ -95,9 +95,9 @@ Moteur::Moteur(std::string const& name) : TaskContext(name){
   // attribut
   i = 0;
   v = 0;
-  p=0;
-  in=0;
-  out=0;
+  p.data=0.0;
+  in.data=0.0;
+  out.data=0.0;
 
   this->ports()->addPort( "cmd", cmd ).doc( "Commande" );
   this->ports()->addPort( "pos", pos ).doc( "Position" );
@@ -134,10 +134,10 @@ void Moteur::updateHook(){
     std::cout<< "cmd="<<in.data<<std::endl;
     ni = a11*i+a12*v+b1*in.data;
     nv = a21*i+a22*v+b2*in.data;
-    p += nv*Te;
+    p.data += nv*Te;
     i = ni;
     v = nv;
-    out.data=p;
+    out.data=p.data;
     pos.write(out);
     std::cout<< "position="<<p<<std::endl;
   }
