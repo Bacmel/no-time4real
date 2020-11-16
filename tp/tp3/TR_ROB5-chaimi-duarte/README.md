@@ -131,7 +131,7 @@ Our path/to/script = src/MyTask/src
 
 The first component we define is the **Controller**. It has :
 
-- A `public InputPort<double>` mes ;
+- A `public InputPort<double>` e_mes ;
 - A `public OutputPort<double>` cmd ;
 - A `public double` des ;
 - And all the constants and variable to implement a **PID**.
@@ -140,7 +140,7 @@ Inside the *updateHook* is define the **PID** function :
 ```cpp
  void Controller::updateHook(){
   ...
-  while (mes.read(in)){
+  while (e_mes.read(in)){
     std::cout<< "mes="<<in.data <<std::endl;
     e = des-in.data;
     err_tot += e*Te;
@@ -159,7 +159,7 @@ Inside the *updateHook* is define the **PID** function :
 
 The second component we define is the **Moteur**. It has :
 
-- A `public InputPort<double>` cmd ;
+- A `public InputPort<double>` e_cmd ;
 - A `public OutputPort<double>` pos ;
 - And all the constants and variable to implement a **DCM**.
 
@@ -167,7 +167,7 @@ Inside the *updateHook* is define the **DCM** function :
 ```cpp
 void Moteur::updateHook(){
   ...
-  while (cmd.read(in)){
+  while (e_cmd.read(in)){
     std::cout<< "cmd="<<in.data<<std::endl;
     ni = a11*i+a12*v+b1*in.data;
     nv = a21*i+a22*v+b2*in.data;
@@ -198,12 +198,18 @@ and to add our packages in **CmakeList.txt** file
 ```
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs)
 ```
-And finally we import the needed packages in our deployer by writting them in the **.ops** file
+We import the needed packages in our deployer by writting them in the **.ops** file
 ```
 import("rtt_ros")
 import("rtt_std_msgs")
 import("rtt_roscomm")
 import("rtt_rosnode")
+```
+We finally streamall the data we want on specific topics.
+```
+//topics 
+stream("moteur.pos", ros.comm.topic("/position"))
+stream("controleur.cmd", ros.comm.topic("/commande"))
 ```
 
 ## Related Documents
