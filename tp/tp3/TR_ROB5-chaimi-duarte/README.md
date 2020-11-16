@@ -127,7 +127,7 @@ Our path/to/script = src/MyTask/src
 
 ### Question 2.8
 
-*Now we work on **MyTask_controller.cpp** and **MyTask_controller.hpp**.*
+*Now we work on **MyTask_controller.cpp** and **MyTask_controller.hpp** and **startC.ops**.
 
 The first component we define is the **Controller**. It has :
 
@@ -180,11 +180,31 @@ void Moteur::updateHook(){
   }
   ...
 ```
+To run the code we need to load the **startC.ops** script in the deployer
 
 ### Question 2.9
 
+In order to read the messages in ROS we need to use std_mgs::Float64 type for our input and output ports. Moreover we need to add some dependencies in our **.xml** file 
+```
+  <build_depend>rtt_ros</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>ocl</build_depend>
 
-
+  <run_depend>rtt_ros</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <build_depend>ocl</build_depend>
+```
+and to add our packages in **CmakeList.txt** file
+```
+find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs)
+```
+And finally we import the needed packages in our deployer by writting them in the **.ops** file
+```
+import("rtt_ros")
+import("rtt_std_msgs")
+import("rtt_roscomm")
+import("rtt_rosnode")
+```
 
 ## Related Documents
 
