@@ -1,8 +1,5 @@
-#ifndf MOTEUR_HPP
-#define MOTEUR_HPP
+
 #include "Grove_Motor_Driver_TB6612FNG.h"
-
-
 
 class Moteur{
 private:
@@ -12,6 +9,3 @@ public:
   void balayage();
   void stop();
 };
-
-
-#endif // MOTEUR_HPP

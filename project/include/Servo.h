@@ -1,5 +1,3 @@
-#ifndf SERVO_HPP
-#define SERVO_HPP
 
 class Servo{
 private:
@@ -13,6 +11,3 @@ public:
   void setPos(int angle);
   int getPos();
 };
-
-
-#endif // SERVO_HPP

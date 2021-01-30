@@ -1,4 +1,4 @@
-#include "../include/Servo.hpp"
+#include "../include/Servo.h"
 #include <wiringPi.h>
 #include <softPwm.h>
 

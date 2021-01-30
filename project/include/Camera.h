@@ -1,5 +1,3 @@
-#ifndf CAMERA_HPP
-#define CAMERA_HPP
 
 class Camera{
 private:
@@ -11,5 +9,3 @@ public:
   void getPicture();
 };
 
-
-#endif // CAMERA_HPP
