@@ -1,11 +1,11 @@
-#include "include/Moteur.h"
+#include "include/Capteur.h"
+#include <iostream>
 using namespace std;
 
 int main(){
-	Moteur moteur();
-	moteur.balayage();
+	Capteur capteur;
+    cout<<capteur.getDonnees()<<endl;
 	return 0;
-	
 
 }
 

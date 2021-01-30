@@ -1,3 +1,5 @@
+#ifndef _MOTEUR_H_
+#define _MOTEUR_H_
 
 #include "Grove_Motor_Driver_TB6612FNG.h"
 
@@ -9,3 +11,5 @@ public:
   void balayage();
   void stop();
 };
+#endif _MOTEUR_H_
+
