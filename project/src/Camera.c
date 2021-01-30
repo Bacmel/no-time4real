@@ -1,4 +1,4 @@
-#include "Camera.hpp"
+#include "../include/Camera.hpp"
 #include "opencv2/core/core_c.h"
 #include "opencv2/core/types_c.h"
 #include "opencv2/highgui/highgui_c.h"
@@ -13,7 +13,7 @@ Camera::Camera(){
 void Camera::getPicture(){
 	
 	if (!capture.isOpen()){
-		print("ERROR: Could not open camera");
+		printf("ERROR: Could not open camera");
 		break;
 	}
 
