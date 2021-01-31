@@ -1,10 +1,10 @@
-#include "include/Capteur.h"
+#include "include/Motor.h"
 #include <iostream>
 using namespace std;
 
 int main(){
-	Capteur capteur;
-    cout<<capteur.getDonnees()<<endl;
+	Motor moteur;
+    moteur.balayage('r')
 	return 0;
 
 }

@@ -1,5 +1,6 @@
 #include "../include/Capteur.h"
 #include <WiringPiI2C.h>
+#include <wiringPi.h>
 #include <iostream.h>
 using namespace std;
 
