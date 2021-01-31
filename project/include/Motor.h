@@ -1,7 +1,6 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include <wiringPiI2C.h>
 #include <math.h>
 #include <iostream>
 #include <unistd.h>
@@ -11,6 +10,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/ioctl.h>
 
 #define GROVE_MOTOR_DRIVER_DEFAULT_I2C_ADDR         0x14
 #define CMD_BRAKE            0x00
@@ -23,10 +23,12 @@
 class Motor{
 private:
     int fd;
+	int fd2;	
     int speed;
     int cmd;
+	char buff[10]//buffer pour lire
 public:
     Motor();
-    void balayage(char choice);
+    int balayage();
 };
 #endif

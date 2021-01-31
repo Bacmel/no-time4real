@@ -1,5 +1,9 @@
-#ifndef _CAMERA_H_
-#define _CAMERA_H_
+#ifndef CAMERA_H
+#define CAMERA_H
+#include "opencv2/core/core_c.h"
+#include "opencv2/core/types_c.h"
+#include "opencv2/highgui/highgui_c.h"
+#include "opencv2/videoio/videoio_c.h"
 
 class Camera{
 private:
@@ -11,4 +15,4 @@ public:
   void getPicture();
 };
 
-#endif _CAMERA_H_
+#endif CAMERA_H

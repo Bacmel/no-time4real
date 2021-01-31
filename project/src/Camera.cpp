@@ -1,8 +1,5 @@
 #include "../include/Camera.h"
-#include "opencv2/core/core_c.h"
-#include "opencv2/core/types_c.h"
-#include "opencv2/highgui/highgui_c.h"
-#include "opencv2/videoio/videoio_c.h"
+
 using namespace std;
 
 Camera::Camera(){
@@ -20,7 +17,7 @@ void Camera::getPicture(){
   while(1) {
     frame = cvQueryFrame(capture);
     cvShowImage("Parisienne", frame);
-	
+
     if (waitKey(10)>=0){
       cvReleaseCapture(&capture);
       cvDestroyWindow( "Test");
