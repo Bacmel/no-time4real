@@ -1,5 +1,5 @@
-#ifndef MOTOR_CC_HPP
-#define MOTOR_CC_HPP
+#ifndef MOTOR_H
+#define MOTOR_H
 
 #include <wiringPiI2C.h>
 #include <math.h>
@@ -18,7 +18,15 @@
 #define CMD_CW               0x02  // commande tourner dans le trigo
 #define CMD_CCW              0x03  // anti-horaire / anti-trigo
 #define CMD_SET_ADDR         0x11
+#define CHANNEL 1
 
-void scan(char choice);
-
+class Motor{
+private:
+    int fd;
+    int speed;
+    int cmd;
+public:
+    Motor();
+    void balayage(char choice);
+};
 #endif

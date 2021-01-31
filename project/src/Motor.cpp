@@ -1,18 +1,18 @@
+
 #include "../include/Motor.h"
-#include <wiringPiI2C.h>
 #include <wiringPi.h>
-#include <stdio.h>
+using namespace std;
 
 Motor::Motor(){
   fd = wiringPiI2CSetup(GROVE_MOTOR_DRIVER_DEFAULT_I2C_ADDR);
   if (fd==-1){
-    printf("ERROR: Failed to init i2c communication (Motor_driver).\n");
-    break;
+    cout<<("ERROR: Failed to init i2c communication (Motor_driver).\n")<<endl;
+
   }
   cout<<"i2c communication succesfull (Motor_Driver).\n"<<endl;
 
 }
-void balayage(char choice)
+void Motor::balayage(char choice)
 {
 
     speed = 100; // Entre 0 et 255

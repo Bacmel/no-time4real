@@ -4,7 +4,7 @@ using namespace std;
 
 int main(){
 	Motor moteur;
-    moteur.balayage('r')
+        moteur.balayage('r');
 	return 0;
 
 }

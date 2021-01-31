@@ -12,7 +12,7 @@ OBJ := $(SRC:.cpp=.o) # Liste des fichiers objets
 
 all: lidar
 
-main: $(OBJ)
+lidar: $(OBJ)
 	$(CXX) $(LDFLAGS) -o lidar $^ $(LIBS)
 
 %.o: $(INCLUDE)
