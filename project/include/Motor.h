@@ -19,16 +19,14 @@
 #define CMD_STOP             0x01
 #define CMD_CW               0x02  // commande tourner dans le trigo
 #define CMD_CCW              0x03  // anti-horaire / anti-trigo
-#define CMD_SET_ADDR         0x11
 #define CHANNEL 1
 
 class Motor{
 private:
-    int fd;
-	int fd2;	
+    int fd;	
     int speed;
     int cmd;
-	char buff[10];//buffer pour lire
+    Encoder encoder;
 public:
     Motor();
     void stop();
