@@ -1,6 +1,8 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
+#include <WiringPiI2C.h>
+#include <wiringPi.h>
 #include <math.h>
 #include <iostream>
 #include <unistd.h>
@@ -26,7 +28,7 @@ private:
 	int fd2;	
     int speed;
     int cmd;
-	char buff[10]//buffer pour lire
+	char buff[10];//buffer pour lire
 public:
     Motor();
     int balayage();
