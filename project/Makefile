@@ -9,7 +9,7 @@ INC_DIR :=-I/include
 
 INCLUDE = $(wildcard $(INC_DIR)/*.h)# Liste des fichiers Heather
 
-SRC := $(wildcard $(SRC_DIR)/*.cpp) src/interuption_driver.c lidar.cpp  # Liste des fichiers sources pour le main
+SRC := $(wildcard $(SRC_DIR)/*.cpp) driver_interuption.c  lidar.cpp  # Liste des fichiers sources pour le main
 OBJ := $(SRC:.cpp=.o) # Liste des fichiers objets
 
 all: module lidar
@@ -17,10 +17,11 @@ all: module lidar
 lidar: $(OBJ)
 	$(CXX) $(LDFLAGS) -o lidar $^ $(LIBS)
 
-%.o: $(INCLUDE)
+%.o: %.c %.h
+	$(CXX) -o $@ -c $< $(CXXFLAGS) $(LDFLAGS)
 
 module:
-$(MAKE) -C $(KDIR) M=$(shell pwd) modules
+	$(MAKE) -C $(KDIR) M=$(shell pwd) modules
 
 clean:
-rm -rf $(OBJ) *.[oas] .*.flags *.ko .*.cmd .*.d .*.tmp *.mod.c
+	rm -rf $(OBJ) *.[oas] .*.flags *.ko .*.cmd .*.d .*.tmp *.mod.c

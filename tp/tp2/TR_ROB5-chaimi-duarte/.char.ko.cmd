@@ -1,0 +1,1 @@
+cmd_/home/pi/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.ko := ld -r  -EL  --build-id  -T ./scripts/module-common.lds -T ./arch/arm/kernel/module.lds -o /home/pi/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.ko /home/pi/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.o /home/pi/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.mod.o;  true
