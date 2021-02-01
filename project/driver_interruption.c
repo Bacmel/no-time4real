@@ -9,53 +9,57 @@
 #include <linux/gpio.h>
 #include <linux/interrupt.h>
 #include <asm/io.h>
-#include <linux/sched.h>
+#include <linux/wait.h>
 #include <linux/init.h>		/* module_{init,exit}() */
-#include <linux/slab.h>
+#include <linux/slab.h>		/* kmalloc()/kfree() */
+#include <asm/uaccess.h>
+#include <linux/sched.h>
+#include <linux/uaccess.h>
+
+
+#define  DEVICE_NAME "encodeur"    ///< The device will appear at /dev/mychar using this value
+#define  CLASS_NAME  "encodeur"        ///< The device class -- this is a character device driv
+
+static struct class*  charClass  = NULL; ///< The device-driver class struct pointer
+static struct device* charDevice = NULL; ///< The device-driver device struct pointer
+
+int major;
 
 MODULE_LICENSE( "GPL" );
 MODULE_DESCRIPTION( "Pilote pour récupération Interruptions sur Raspberry Pi" );
 
 
-#define N_DEVICES 1
 
 // Numéros des pins utilisés :
-#define IRQ_PIN_1 18//18
-#define IRQ_PIN_2 19 //19
-
-// Définition des macros pour l'utilisation directe des GPIO de la Raspberry Pi :
-#define INP_GPIO(g) *(gpio+((g)/10)) &= ~(7<<(((g)%10)*3))
-#define SET_GPIO_ALT(g,a) *(gpio+(((g)/10))) |= (((a)<=3?(a)+4:(a)==4?3:2)<<(((g)%10)*3))
-#define OUT_GPIO(g) 
-#define GET_GPIO(g) (*(gpio+13)&(1<<g)) 
-#define GPIO_PULL *(gpio+37) // Pull up/pull down
-#define GPIO_PULLCLK0 *(gpio+38) // Pull up/pull down clock
-
-
-#define DEVICE_NAME "encoder" ///< The device will appear at /dev/encoder using this value
-#define CLASS_NAME "encoder" ///< The device class -- this is a character device driv
-
+#define IRQ_PIN_1 18
+#define IRQ_PIN_2 19
 
 // Adresse de base pour les registres correspondant aux GPIO de la Raspberry Pi :
 static volatile unsigned* gpio;
 
+// Définition des macros pour l'utilisation directe des GPIO de la Raspberry Pi :
+#define INP_GPIO(g) *(gpio + ((g)/10)) &= ~(7<<(((g)%10)*3))
+#define SET_GPIO_ALT(g,a) *(gpio + (((g)/10))) |= (((a)<=3?(a)+4:(a)==4?3:2)<<(((g)%10)*3))
+#define OUT_GPIO(g) *(gpio + ((g)/10)) |= (1<<(((g)%10)*3))
+#define GET_GPIO(g) (*(gpio + 13) & (1<<g)) // 0 if LOW and (1 << g) if HIGH
 
+#define GPIO_SET *(gpio+7)  // sets   bits which are 1 ignores bits which are 0
+#define GPIO_CLR *(gpio+10) // clears bits which are 1 ignores bits which are 0
 
-static int major;
-static struct class* encoder_class = NULL; ///< The device-driver class struct pointer
-static struct device* encoder_device = NULL; ///< The device-driver device struct pointer
-
+#define GPIO_PULL *(gpio+37) // Pull up/pull down
+#define GPIO_PULLCLK0 *(gpio+38) // Pull up/pull down clock
 
 // Les variables globales et les fonctions sont déclarées statiques afin qu'elles ne soient visibles
 // que dans le code de ce fichier. On évite ainsi toute ambiguïté avec autres variables du noyau
 // qui partage le même segment de mémoire.
 
 // Valeur correspondant à la position du codeur :
-static long encoder_count[N_DEVICES];
+static long encoder_count = 0;
 
 // Déclaration des numéros de pins comme paramètres du module :
 static int irq_pin_1 = IRQ_PIN_1;
 static int irq_pin_2 = IRQ_PIN_2;
+
 module_param( irq_pin_1, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP );
 module_param( irq_pin_2, int, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP );
 
@@ -73,6 +77,27 @@ static encoder_data data_1;
 
 
 
+/*
+ * File operations
+ */
+static ssize_t char_read(struct file *file, char *buf, size_t count, loff_t *ppos)
+{
+  int err;
+  char str[20];
+  sprintf(str, "%ld", encoder_count);
+  printk("encodeur_count = %ld\n", encoder_count);
+  if (count < 20) { return 0; }
+  err = copy_to_user(buf, str, count);
+  if(err != 0)
+    printk(KERN_ALERT "The message from driver buffer has not been copied: %d bytes were not copied!\n", err);
+  return count;
+}
+
+static struct file_operations char_fops = {
+	.owner =	THIS_MODULE,
+	.read =		char_read,
+};
+
 //-------------------------------------
 // Fonctions gérant les interruptions :
 //-------------------------------------
@@ -83,17 +108,14 @@ static irqreturn_t encoder_irq_handler( int irq, void* dev_id )
 	// Interprétation du pointeur vers les données de l'interruption :
 	encoder_data* data = (encoder_data*) dev_id;
 
-	// TODO : Incrémentation du codeur.
-	INP_GPIO(IRQ_PIN_2); // pin en in 
-	int res = GET_GPIO( IRQ_PIN_2); //retourne ( 1 << numéro_du_pin ) si le pin est à 5V, 0 s'il est à 0V.
-    printk("data = %d",res);
-    if (res > 0){
-		(*(data->count))++;
-	}
-	else {
-		(*(data->count))--;
-	}
-	printk("irq_rcvd count = %ld \n",*(data->count));
+	int pin_2 = GET_GPIO(IRQ_PIN_2);
+	printk("pin 2 = %d\n", pin_2);
+	if (pin_2 > 0)
+		(*data->count)--;
+	else
+		(*data->count)++;
+
+	printk("irq_rcvd count = %ld \n", *data->count);
 	return IRQ_HANDLED;
 }
 
@@ -115,8 +137,7 @@ static void setup_irq_pin( encoder_data* data )
 		encoder_irq_handler,
 		IRQF_TRIGGER_RISING,
 		THIS_MODULE->name,
-		data
-	) >= 0 )
+		data) >= 0 )
 		printk( KERN_INFO "%s: interruption \"%s\" allocated on line %u\n", THIS_MODULE->name, data->label, data->irq );
 }
 
@@ -125,90 +146,18 @@ static void free_encoder_pins( encoder_data* data )
 {
 	free_irq( data->irq, data );
 	gpio_free( data->irq_pin );
-
 }
 
-//-------------------------------------
-//    Device management functions     :
-//-------------------------------------
-typedef union Buffer_int
-{
-	long count;
-	char count_byte[sizeof(long)];
-} Buffer_int;
-
-
-
-static int encoder_open(struct inode* inode, struct file* file) { return 0; }
-
-static int encoder_release(struct inode* inode, struct file* file) { return 0; }
-
-static ssize_t encoder_read(struct file* file, char* buf, size_t count, loff_t* ppos)
-{
-   
-    int res;
-	Buffer_int buf_noy;
-	buf_noy.count = encoder_count[0];
-
-    // Ensure the reader wants the full long value
-    if (count < sizeof(long)) { return 0; }
-    // Convert the long value to an array of bytes
-    // Transmit that array to the user
-    res = raw_copy_to_user(buf, buf_noy.count_byte, sizeof(long));
-    if (res < 0)
-    {
-        printk(KERN_ALERT "Failed to copy to user");
-        return 0;
-    }
-    return sizeof(long);
-}
-
-static ssize_t encoder_write(struct file* file, const char* buf, size_t count, loff_t* ppos) { return 0; }
 
 //-----------------------------
 // Fonctions gérant le module :
 //-----------------------------
-static struct file_operations encoder_fops = {
-	.owner =	THIS_MODULE,
-	.read =		encoder_read,
-	.write =	encoder_write,
-	.open =		encoder_open,
-	.release =	encoder_release,
-};
+
 // Fonction appelée au chargement du module :
 int init_module( void )
 {
 	void* gpio_map;
-	int i;
-	
-	// Register the device
-	major = register_chrdev(major,"encoder", &encoder_fops);
 
-	if (major<0)
-	{
-		printk(KERN_ALERT "failed to register the device \n");
-		return major;
-	}
-	  // Register the device class
-	    encoder_class = class_create(THIS_MODULE, CLASS_NAME);
-	    if (IS_ERR(encoder_class))
-	    { // Check for error and clean up if there is
-		unregister_chrdev(major, DEVICE_NAME);
-		printk(KERN_ALERT "Failed to register device class\n");
-		return PTR_ERR(encoder_class); // Correct way to return an error on a pointer
-	    }
-
-	
-		   // Create the device
-	    encoder_device = device_create(encoder_class, NULL, MKDEV(major, 0), NULL, DEVICE_NAME);
-	    if (IS_ERR(encoder_device))
-	    { // Clean up if there is an error
-		class_destroy(encoder_class); // Repeated code but the alternative is goto statements
-		unregister_chrdev(major, DEVICE_NAME);
-		printk(KERN_ALERT "Failed to create the device\n");
-		return PTR_ERR(encoder_device);
-	    }
-	
 	// Translation des adresses pour l'utilisation directe des GPIO de la Raspberry Pi :
 	gpio_map = ioremap( 0x3F200000, SZ_16K );
 	if ( gpio_map == NULL )
@@ -221,43 +170,58 @@ int init_module( void )
 	// Remplissage des structures de données utilisées pour traiter les interruptions :
 	data_1.label = "irq 1";
 	data_1.irq_pin = irq_pin_1;
-	encoder_count[0] = 0; 
-	data_1.count = &encoder_count[0];
-	printk("adresse data_1 = %ld, adresse encodeur = %ld\n",*(data_1.count),encoder_count[0]);
+	data_1.count = &encoder_count;
+
+	INP_GPIO( irq_pin_2 );
 
 	// Allocation des pins :
-	
 	setup_irq_pin( &data_1 );
-	INP_GPIO(IRQ_PIN_2);
-	SET_GPIO_ALT(IRQ_PIN_2,0);
-
-	// enable pull-up on GPIO16&17
+	// enable pull-up on GPIO24&25
     GPIO_PULL = 2;
-	for (i=0; i<150;i++);
-	
     // clock on GPIO 22 & 23 (bit 24 & 25 set)
-    GPIO_PULLCLK0 = (1 << IRQ_PIN_1) | (1 << IRQ_PIN_2);
+    GPIO_PULLCLK0 = (1 << IRQ_PIN_1) | (1 << IRQ_PIN_2);	
 
-	return 0;
+
+	int ret;
+	ret = register_chrdev(major, "encodeur", &char_fops);
+	if (ret<0){
+		return ret;
+	}
+	major = ret;
+
+	/****** Automatically creating virtual files in /dev ******/
+	// Register the device class
+	charClass = class_create(THIS_MODULE, CLASS_NAME);
+	if (IS_ERR(charClass)){                // Check for error and clean up if there is
+		unregister_chrdev(major, DEVICE_NAME);
+		printk(KERN_ALERT "Failed to register device class\n");
+		return PTR_ERR(charClass);          // Correct way to return an error on a pointer
+	}
+	
+	// Register the device driver
+	charDevice = device_create(charClass, NULL, MKDEV(major, 0), NULL, DEVICE_NAME);
+	if (IS_ERR(charDevice)){               // Clean up if there is an error
+		class_destroy(charClass);           // Repeated code but the alternative is goto statements
+		unregister_chrdev(major, DEVICE_NAME);
+		return PTR_ERR(charDevice);
+	}
+
+  	return 0;
 }
 
 // Fonction appelée au retrait du module :
 void cleanup_module( void )
 {
-	device_destroy(encoder_class, MKDEV(major, 0)); // Remove the device
-   	class_unregister(encoder_class); // Unregister the device class
-   	class_destroy(encoder_class); // Remove the device class
-    	unregister_chrdev(major, "encoder"); // Unregister the device
-
-	encoder_count[0] = 0; 
-	data_1.count = &encoder_count[0];
-
 	// Libération des pins :
 	free_encoder_pins( &data_1 );
-
-	// Deactive the pull up
 	GPIO_PULL = 0;
-   	GPIO_PULLCLK0 = 0;
+    GPIO_PULLCLK0 = 0;
 
 	printk( KERN_INFO "%s: module removed\n", THIS_MODULE->name );
+
+	device_destroy(charClass, MKDEV(major, 0));     // remove the device
+	class_unregister(charClass);                          // unregister the device class
+	class_destroy(charClass);                             // remove the device class
+	
+	unregister_chrdev(major, "encodeur");
 }
