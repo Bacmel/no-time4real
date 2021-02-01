@@ -21,7 +21,6 @@ int Motor::balayage()
   speed = 100; // Entre 0 et 255
   cmd = (speed << 8) | (CHANNEL & 0xFF);
 
-
   fd2 = open("/dev/encoder", O_RDWR) ;
 
   cout<<("\nOpening Driver\n")<<endl;
@@ -31,7 +30,7 @@ int Motor::balayage()
   }
 
   cout<<("File opened\n")<<endl;
-  read(fd2,buff,strlen(buff));
+  int interrupt =  read(fd2,buff,strlen(buff));
 
   while(1){
     if (buff[0]=='-' && (int)buff[1]<'2'&& (int)buff[2]<'5'){
