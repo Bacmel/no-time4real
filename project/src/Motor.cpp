@@ -21,27 +21,13 @@ int Motor::balayage()
   speed = 100; // Entre 0 et 255
   cmd = (speed << 8) | (CHANNEL & 0xFF);
 
-  fd2 = open("/dev/encoder", O_RDWR) ;
-
-  cout<<("\nOpening Driver\n")<<endl;
-  if(fd2 < 0) {
-    cout<<("ERROR:Cannot open device file...\n")<<endl;
-    return -1;
-  }
-
-  cout<<("File opened\n")<<endl;
-  int interrupt =  read(fd2,buff,strlen(buff));
-
+  wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);
   while(1){
-    if (buff[0]=='-' && (int)buff[1]<'2'&& (int)buff[2]<'5'){
-      wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense anti-trigo
-    }else if  ((int)buff[0]<'2'&& (int)buff[1]<'5'){
+    if (encoder.getStep()>=0 && encoder.getStep()<25){
       wiringPiI2CWriteReg16(fd, CMD_CW, cmd);//sense trigo
+    }else if (encoder.getStep()>=-25 && encoder.getStep()<0){
+      wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense anti-trigo
     }
 
   }
-
-  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x01);
-  close(fd2);
-
 }
