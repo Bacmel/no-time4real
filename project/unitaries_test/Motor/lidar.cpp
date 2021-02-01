@@ -1,4 +1,4 @@
-#include <WiringPiI2C.h>
+#include <wiringPiI2C.h>
 #include <wiringPi.h>
 #include <math.h>
 #include <iostream>
@@ -10,16 +10,18 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+using namespace std; 
+
 
 #define GROVE_MOTOR_DRIVER_DEFAULT_I2C_ADDR         0x14
-#define CMD_BRAKE            0x00
-#define CMD_STOP             0x01
+#define CMD_BRAKE            0x01
+#define CMD_STOP             0x00
 #define CMD_CW               0x02  // commande tourner dans le trigo
 #define CMD_CCW              0x03  // anti-horaire / anti-trigo
 #define CMD_SET_ADDR         0x11
 #define CHANNEL 1
 
-using namespace std;
+
 
 int main(){
 
@@ -35,9 +37,10 @@ int main(){
   }
   cout<<"i2c communication succesfull (Motor_Driver).\n"<<endl;
 
-  speed = 100; // Entre 0 et 255
+  speed = 110; // Entre 0 et 255
   cmd = (speed << 8) | (CHANNEL & 0xFF);
 
+  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x00);
   fd2 = open("/dev/encoder", O_RDWR) ;
   cout<<("\nOpening Driver\n")<<endl;
   if(fd2 < 0) {
@@ -59,5 +62,6 @@ int main(){
   return 0;
 
 }
+
 
 

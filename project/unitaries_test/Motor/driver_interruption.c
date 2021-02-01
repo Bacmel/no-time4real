@@ -86,8 +86,8 @@ static irqreturn_t encoder_irq_handler( int irq, void* dev_id )
 	// TODO : Incrémentation du codeur.
 	INP_GPIO(IRQ_PIN_2); // pin en in 
 	int res = GET_GPIO( IRQ_PIN_2); //retourne ( 1 << numéro_du_pin ) si le pin est à 5V, 0 s'il est à 0V.
-    printk("data = %d",res);
-    if (res > 0){
+    	printk("data = %d",res);
+    	if (res > 0){
 		(*(data->count))++;
 	}
 	else {

@@ -1,7 +1,7 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include <WiringPiI2C.h>
+#include <wiringPiI2C.h>
 #include <wiringPi.h>
 #include <math.h>
 #include <iostream>

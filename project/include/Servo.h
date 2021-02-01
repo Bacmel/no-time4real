@@ -1,6 +1,6 @@
 
-#ifndef _SERVO_H_
-#define _SERVO_H_
+#ifndef SERVO_H
+#define SERVO_H
 
 class Servo{
 private:
@@ -12,8 +12,9 @@ private:
 public:
   Servo(int pin, int min, int max);
   void setPos(int angle);
+  void setTrajet(int angle, int delay);
   int getPos();
 };
 
-#endif _SERVO_H_
+#endif
 

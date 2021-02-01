@@ -1,8 +1,8 @@
 #include "../include/Servo.h"
 #include <wiringPi.h>
 #include <softPwm.h>
-
-
+#include <math.h>
+#include <unistd.h>
 Servo::Servo(int pin, int min, int max){
   this->pin = pin;
   this->min = min;
@@ -30,7 +30,7 @@ void Servo::setTrajet(int angle, int delay){
   float dt = delay/abs(angle - this->angle);
   for(int i = this->angle; i<=angle; i++){
     softPwmWrite(this->pin, i);
-    delay(dt);
+    sleep(dt);
   }
 
 }
