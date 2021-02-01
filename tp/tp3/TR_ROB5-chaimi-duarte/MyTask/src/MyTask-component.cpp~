@@ -1,0 +1,52 @@
+#include "MyTask-component.hpp"
+#include <rtt/Component.hpp>
+#include <iostream>
+
+using namespace std;
+using namespace RTT;
+using namespace Orocos;
+
+MyTask::MyTask(std::string const& name) : TaskContext(name){
+  std::cout << "MyTask constructed !" <<std::endl;
+}
+
+bool MyTask::configureHook(){
+  std::cout << "MyTask configured !" <<std::endl;
+  log(Info) << "configure Hook !" <<endlog();
+  return true;
+}
+
+bool MyTask::startHook(){
+  std::cout << "MyTask started !" <<std::endl;
+  log(Info) << "start Hook!" <<endlog();
+  return true;
+}
+
+void MyTask::updateHook(){
+  std::cout << "MyTask executes updateHook !" <<std::endl;
+  log(Info) << "update Hook !" <<endlog();
+}
+
+void MyTask::stopHook() {
+  std::cout << "MyTask executes stopping !" <<std::endl;
+  log(Info) << "stop Hook !" <<endlog();
+}
+
+void MyTask::cleanupHook() {
+  std::cout << "MyTask cleaning up !" <<std::endl;
+  log(Info) << "cleanup Hook !" <<endlog();
+}
+
+/*
+ * Using this macro, only one component may live
+ * in one library *and* you may *not* link this library
+ * with another component library. Use
+ * ORO_CREATE_COMPONENT_TYPE()
+ * ORO_LIST_COMPONENT_TYPE(MyTask)
+ * In case you want to link with another library that
+ * already contains components.
+ *
+ * If you have put your component class
+ * in a namespace, don't forget to add it here too:
+ */
+ORO_CREATE_COMPONENT(MyTask)

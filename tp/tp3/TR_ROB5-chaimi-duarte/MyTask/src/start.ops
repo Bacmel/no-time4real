@@ -1,0 +1,12 @@
+import("MyTask")   // 'MyTask' is a directory name to import   
+
+loadComponent("task", "MyTask") // Creates a new component of type 'MyTask'
+
+loadComponent("task2", "MyTask2") // Creates a new component of type 'MyTask2'
+
+task.configure()
+
+task2.configure()
+
+
+

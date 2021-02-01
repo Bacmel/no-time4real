@@ -1,0 +1,17 @@
+#ifndf CAMERA_HPP
+#define CAMERA_HPP
+
+class Camera{
+private:
+  int pin;
+  int min;
+  int max;
+  int angle;
+
+public:
+  Camera(int pin, int min, int max);
+  void getPicture();
+};
+
+
+#endif // CAMERA_HPP

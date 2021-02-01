@@ -1,0 +1,37 @@
+import("MyTask")
+
+import("rtt_ros")
+
+import("rtt_std_msgs")
+
+import("rtt_roscomm")
+
+import("rtt_rosnode")
+
+loadComponent("moteur", "Moteur")
+
+loadComponent("controller", "Controller")
+
+moteur.setPeriod(0.1)
+
+controller.setPeriod(0.1)
+
+stream("moteur.pos", ros.comm.topic("/position"))
+
+stream("controller.cmd", ros.comm.topic("/commande"))
+
+connect("controller.cmd", "moteur.e_cmd", ConnPolicy())
+
+connect("moteur.pos", "controller.e_mes", ConnPolicy())
+
+moteur.configure()
+
+controller.configure()
+
+moteur.start()
+
+controller.start()
+
+
+
+
