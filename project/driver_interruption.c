@@ -17,8 +17,8 @@
 #include <linux/uaccess.h>
 
 
-#define  DEVICE_NAME "encodeur"    ///< The device will appear at /dev/mychar using this value
-#define  CLASS_NAME  "encodeur"        ///< The device class -- this is a character device driv
+#define  DEVICE_NAME "encoder"    ///< The device will appear at /dev/mychar using this value
+#define  CLASS_NAME  "encoder"        ///< The device class -- this is a character device driv
 
 static struct class*  charClass  = NULL; ///< The device-driver class struct pointer
 static struct device* charDevice = NULL; ///< The device-driver device struct pointer
@@ -183,7 +183,7 @@ int init_module( void )
 
 
 	int ret;
-	ret = register_chrdev(major, "encodeur", &char_fops);
+	ret = register_chrdev(major, "encoder", &char_fops);
 	if (ret<0){
 		return ret;
 	}
@@ -223,5 +223,5 @@ void cleanup_module( void )
 	class_unregister(charClass);                          // unregister the device class
 	class_destroy(charClass);                             // remove the device class
 	
-	unregister_chrdev(major, "encodeur");
+	unregister_chrdev(major, "encoder");
 }
