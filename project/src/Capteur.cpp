@@ -13,9 +13,15 @@ Capteur::Capteur(){
     cout<<"i2c communication succesfull (IR sensor).\n"<<endl;
   }
 }
-double Capteur::getDonnees(){
-  voltage = wiringPiI2CReadReg16(fd,0x20+CHANNEL)/1000;
-  distance = 27.86 *pow(voltage,-1.15);
+float Capteur::getDonnees(){
+  int raw = wiringPiI2CReadReg16(fd,0x31);
+  cout<<"raww="<<raw<<"\n"<<endl;
+  float voltage = (float)raw * 0.0048828125;
+  cout<<"volt="<<voltage<<"\n"<<endl;
+
+  distance = 27.86 * pow(voltage,-1.15);
+  cout<<"distance="<<distance<<"\n"<<endl;
+
   return distance;
 
 }

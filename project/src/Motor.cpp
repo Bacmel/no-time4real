@@ -1,6 +1,6 @@
 
 #include "../include/Motor.h"
-
+#include <unistd.h>
 using namespace std;
 
 Motor::Motor(){
@@ -16,6 +16,10 @@ int Motor::balayage()
 {
   speed = 100; // Entre 0 et 255
   cmd = (speed << 8) | (CHANNEL & 0xFF);
+
+  wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense anti-trigo
+  sleep(8);
+  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x01);
 
   fd2 = open("/dev/encoder", O_RDWR) ;
   cout<<("\nOpening Driver\n")<<endl;
@@ -33,7 +37,8 @@ int Motor::balayage()
     }
 
   }
-  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x00);
+
+  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x01);
   close(fd2);
 
 }

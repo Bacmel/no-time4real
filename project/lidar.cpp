@@ -5,11 +5,8 @@
 using namespace std;
 
 int main(){
-	Capteur infra;
-    while(1){
-      cout<<"distance = "<<infra.getDonnees()<<"\n"<<endl;
-      sleep(10);
-    }
+    Motor moteur;
+    moteur.balayage();
     return 0;
 }
 

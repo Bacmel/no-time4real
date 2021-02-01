@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
 using namespace std; 
 
 
@@ -39,8 +40,9 @@ int main(){
 
   speed = 110; // Entre 0 et 255
   cmd = (speed << 8) | (CHANNEL & 0xFF);
-
-  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x00);
+//  wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense anti-trigo
+//  sleep(8);
+  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x01);
   fd2 = open("/dev/encoder", O_RDWR) ;
   cout<<("\nOpening Driver\n")<<endl;
   if(fd2 < 0) {

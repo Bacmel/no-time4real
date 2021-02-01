@@ -2,17 +2,17 @@
 #define CAPTEUR_H
 
 #define DEVICE_ID 0x04
-#define CHANNEL 1
+#define CHANNEL 0
 
 class Capteur{
 private:
   int fd;
-  double voltage;
-  double distance;
+  float voltage;
+  float distance;
 
 public:
   Capteur();
-  double getDonnees();//distance
+  float getDonnees();//distance
 };
 
 #endif 
