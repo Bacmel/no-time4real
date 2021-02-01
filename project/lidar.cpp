@@ -6,7 +6,7 @@ using namespace std;
 
 int main(){
     Motor moteur;
-    moteur.balayage();
+    moteur.stop();
     return 0;
 }
 

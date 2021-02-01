@@ -12,23 +12,27 @@ Motor::Motor(){
   cout<<"i2c communication succesfull (Motor_Driver).\n"<<endl;
 
 }
+void Motor::stop(){
+  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x01);
+
+}
 int Motor::balayage()
 {
   speed = 100; // Entre 0 et 255
   cmd = (speed << 8) | (CHANNEL & 0xFF);
 
-  wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense anti-trigo
-  sleep(8);
-  wiringPiI2CWriteReg16(fd, CMD_STOP, 0x01);
 
   fd2 = open("/dev/encoder", O_RDWR) ;
+
   cout<<("\nOpening Driver\n")<<endl;
   if(fd2 < 0) {
     cout<<("ERROR:Cannot open device file...\n")<<endl;
     return -1;
   }
 
-  read(fd,buff,strlen(buff));
+  cout<<("File opened\n")<<endl;
+  read(fd2,buff,strlen(buff));
+
   while(1){
     if (buff[0]=='-' && (int)buff[1]<'2'&& (int)buff[2]<'5'){
       wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense anti-trigo

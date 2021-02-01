@@ -31,6 +31,7 @@ private:
 	char buff[10];//buffer pour lire
 public:
     Motor();
+    void stop();
     int balayage();
 };
 #endif

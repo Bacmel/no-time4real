@@ -1,1 +1,1 @@
-cmd_/home/pi/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.mod := { echo  /home/pi/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.o; echo; } > /home/pi/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.mod
+cmd_/home/pi/Documents/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.mod := { echo  /home/pi/Documents/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.o; echo; } > /home/pi/Documents/no-time4real/tp/tp2/TR_ROB5-chaimi-duarte/char.mod
