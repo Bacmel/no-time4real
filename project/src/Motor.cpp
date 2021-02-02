@@ -1,6 +1,5 @@
 
-#include "../include/Motor.h"
-#include <unistd.h>
+#include "../include/Motor.h" include <unistd.h>
 using namespace std;
 
 Motor::Motor(){
@@ -27,7 +26,8 @@ int Motor::balayage()
       wiringPiI2CWriteReg16(fd, CMD_CW, cmd);//sense trigo
     }else if (encoder.getStep()>=-25 && encoder.getStep()<0){
       wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense anti-trigo
-    }
-
+    }else{
+      this->stop();
   }
+ }
 }

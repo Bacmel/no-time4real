@@ -14,10 +14,11 @@ Encoder::Encoder(){
 
 long Encoder::getStep()
 {
-    cout<< "LAAAAAAAAAAAA"<<endl;
 
   if (fd>0){
     int interrupt =  read(fd,data.res,sizeof(long));
+    cout<< "buff="<< data.res[1]<<endl;
+
     cout<< "interrupt ="<<interrupt<<endl;
     if (interrupt != sizeof(long)){
 	cout<< "Read bytes"<<interrupt<<endl;
