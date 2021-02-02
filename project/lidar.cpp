@@ -6,7 +6,11 @@ using namespace std;
 
 int main(){
     Motor moteur;
-    moteur.stop();
+    Encoder encoder;
+    encoder.getStep();
+  moteur.stop();
+//   moteur.balayage();
+//    moteur.stop();
     return 0;
 }
 

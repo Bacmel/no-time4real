@@ -21,7 +21,7 @@ int Motor::balayage()
   speed = 100; // Entre 0 et 255
   cmd = (speed << 8) | (CHANNEL & 0xFF);
 
-  wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);
+//  wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);
   while(1){
     if (encoder.getStep()>=0 && encoder.getStep()<25){
       wiringPiI2CWriteReg16(fd, CMD_CW, cmd);//sense trigo

@@ -16,11 +16,12 @@
 
 class Encoder{
 private:
-    int fd;	
-    char buff[sizeof(long)];
+    union{
+	char res[sizeof(long)];
+	long val;
+        } data;
+    int fd;
     long step;
-    int interrupt;
-
 public:
     Encoder();
     long getStep();
