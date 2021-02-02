@@ -16,15 +16,13 @@
 
 class Encoder{
 private:
-    union{
-	char res[sizeof(long)];
-	long val;
-        } data;
+    char buff[20];
+    ssize_t bytes_read;
     int fd;
-    long step;
+   
 public:
     Encoder();
-    long getStep();
+    int getStep();
     void closeDeviceFile();
 };
 #endif

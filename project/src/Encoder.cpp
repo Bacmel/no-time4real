@@ -12,22 +12,14 @@ Encoder::Encoder(){
 }
 
 
-long Encoder::getStep()
+int Encoder::getStep()
 {
 
   if (fd>0){
-    int interrupt =  read(fd,data.res,sizeof(long));
-    cout<< "buff="<< data.res[1]<<endl;
-
-    cout<< "interrupt ="<<interrupt<<endl;
-    if (interrupt != sizeof(long)){
-	cout<< "Read bytes"<<interrupt<<endl;
-    }else{
-	 step = data.val;
-    cout<< "pas="<<step<<endl;
-    }
- }
-  return step;
+    bytes_read =  read(fd,buff,20);
+    cout<< "buff="<< atoi(buff)<<endl;
+}
+  return atoi(buff);
 }
 void Encoder::closeDeviceFile(){
   close(fd);

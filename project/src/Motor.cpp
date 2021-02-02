@@ -1,5 +1,6 @@
 
-#include "../include/Motor.h" include <unistd.h>
+#include "../include/Motor.h" 
+#include <unistd.h>
 using namespace std;
 
 Motor::Motor(){
@@ -17,17 +18,17 @@ void Motor::stop(){
 }
 int Motor::balayage()
 {
-  speed = 100; // Entre 0 et 255
+  speed = 80; // Entre 0 et 255
   cmd = (speed << 8) | (CHANNEL & 0xFF);
-
-//  wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);
-  while(1){
-    if (encoder.getStep()>=0 && encoder.getStep()<25){
-      wiringPiI2CWriteReg16(fd, CMD_CW, cmd);//sense trigo
-    }else if (encoder.getStep()>=-25 && encoder.getStep()<0){
-      wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense anti-trigo
-    }else{
-      this->stop();
-  }
- }
+ 
+  if(encoder.getStep()==0){
+	  wiringPiI2CWriteReg16(fd, CMD_CCW, cmd);//sense trig
+	  sleep(0.5);
+  }else if (encoder.getStep()>70){
+	  wiringPiI2CWriteReg16(fd,CMD_CW,cmd);//sense anti_trigo
+	  sleep(0.5);
+  }else if (encoder.getStep()<0){
+	  wiringPiI2CWriteReg16(fd,CMD_CCW,cmd);//sense trigo
+	  sleep(0.5);
+   }
 }

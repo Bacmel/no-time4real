@@ -2,15 +2,21 @@
 #include "include/Capteur.h"
 #include <iostream>
 #include <unistd.h>
+#include <chrono>
+
 using namespace std;
 
 int main(){
+    Capteur infra;
     Motor moteur;
     Encoder encoder;
     encoder.getStep();
-  moteur.stop();
-//   moteur.balayage();
-//    moteur.stop();
+// moteur.stop();
+   while(infra.getDonnees()>15){
+     moteur.balayage();
+   }
+
+    moteur.stop();
     return 0;
 }
 
