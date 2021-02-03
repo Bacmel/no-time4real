@@ -21,16 +21,14 @@ typedef struct
 static Projet projet = 
 {
 	.mutex_d = PTHREAD_MUTEX_INITIALIZER,
-}
+};
 
 static void * fn_lidar(void* p_data);
 static void * fn_pantilt(void* p_data);
 
-static pthread_mutex_t mutex
-
 int main()
 {
-	ret = pthread_create(& projet.thread_lidar, NULL, fn_lidar, NULL);
+	int ret = pthread_create(& projet.thread_lidar, NULL, fn_lidar, NULL);
 	if(ret)
 	{
 		fprintf(stderr, "%s", strerror(ret));

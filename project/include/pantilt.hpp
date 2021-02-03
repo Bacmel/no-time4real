@@ -11,7 +11,7 @@ class PanTilt{
 private:
   Servo pan;
   Servo tilt;
-  Camera camera;
+  int degre;
 
 public:
   PanTilt();

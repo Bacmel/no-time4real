@@ -27,6 +27,11 @@ int Encodeur::getStep()
   return atoi(buff);
 }
 
+int Encodeur::getAngle(){
+	pas = this->getStep();
+	angle = (pas*360)/420;
+	return angle; 
+}
 void Encodeur::closeDeviceFile(){
   close(fd);
 }

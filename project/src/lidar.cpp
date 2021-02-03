@@ -33,5 +33,6 @@ Donnee Lidar::getDonnee()
 	Donnee d;
 	d.distance = infra.getDistance();
 	d.step = encodeur.getStep();
+	d.angle = encodeur.getAngle();
 	return d;
 }

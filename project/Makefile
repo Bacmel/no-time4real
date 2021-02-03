@@ -1,7 +1,7 @@
 CXX      :=  g++
 CXXFLAGS := -Iinclude -Wall -std=c++11
 LDFLAGS := $(shell pkg-config --cflags opencv)
-LIBS := $(shell pkg-config --libs opencv) -lm -lwiringPi
+LIBS := $(shell pkg-config --libs opencv) -lm -lwiringPi -lpthread
 obj-m += driver_interruption.o
 KDIR := /lib/modules/$(shell uname -r)/build
 SRC_DIR :=src

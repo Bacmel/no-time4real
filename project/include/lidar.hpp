@@ -10,6 +10,7 @@
 typedef struct donnee{
 	double distance;
 	int step;
+	int angle;
 } Donnee;
 
 class Lidar
