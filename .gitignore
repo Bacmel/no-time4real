@@ -1,0 +1,5 @@
+*~
+project/*mod*
+project/*.ko
+project/*.o
+project/*/*.o

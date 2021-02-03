@@ -1,6 +1,5 @@
-
-#ifndef SERVO_H
-#define SERVO_H
+#ifndef SERVO_HPP
+#define SERVO_HPP
 
 class Servo{
 private:
