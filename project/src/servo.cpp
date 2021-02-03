@@ -3,15 +3,21 @@
 #include <softPwm.h>
 #include <math.h>
 #include <unistd.h>
-Servo::Servo(int pin, int min, int max){
+#include <cstdio>
+
+
+Servo::Servo(int pin){
   this->pin = pin;
-  this->min = min;
-  this->max = max;
-  wiringPiSetup();
-  softPwmCreate(pin, min, max);
+  if (wiringPiSetup()==-1){
+    printf("Error servo not created");
+  }
+  softPwmCreate
+  pinMode(pin,OUTPUT);
+  printf("servo created");
 }
 
 void Servo::setPos(int angle){
+  pulse = (angle*(1820/180))+600 
   if (angle > max){
     this->angle = max;
 
@@ -22,7 +28,7 @@ void Servo::setPos(int angle){
     this->angle = angle;
 
   }
-  softPwmWrite(this->pin, this->angle);
+  digitalWrite(this->pin, this->angle);
 
 }
 

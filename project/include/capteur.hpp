@@ -5,7 +5,7 @@
 
 #define DEVICE_ID 0x04
 #define C_CHANNEL 0
-#define MEMORY 27
+#define C_MEMORY 27
 
 int filtreMedian(std::vector<int> &vector);
 

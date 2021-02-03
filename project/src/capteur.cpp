@@ -40,7 +40,7 @@ double Capteur::getDistance()
 {
   /* Partie Filtrage */
   vector<int> memory = vector<int>();
-  for(size_t i=0; i<MEMORY; i++)
+  for(size_t i=0; i<C_MEMORY; i++)
   {
   	memory.push_back(wiringPiI2CReadReg16(fd,0x31));
   }

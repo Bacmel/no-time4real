@@ -4,8 +4,8 @@
 #include "servo.hpp"
 #include "camera.hpp"
 
-#define PAN 27 // BCM 16
-#define TILT 21 // BCM 5
+#define PAN 0 // BCM 16
+#define TILT 4 // BCM 5
 
 #define MIN1 0
 #define MAX1 100
