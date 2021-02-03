@@ -2,6 +2,8 @@
 #include <wiringPi.h>
 #include <math.h>
 #include <unistd.h>
+#include <iostream>
+using namespace std;
 
 PanTilt::PanTilt(): pan(PAN), tilt(TILT)
 {
@@ -19,9 +21,12 @@ void PanTilt::getImage(int degre)
 	//Photo
 }
 
-void PanTilt::orientation(int degre)
+void PanTilt::orientation()
 {
-  if (degre>180 || angle<0){
+  d= lidar.getDonnee();
+  degre = d.angle + 90;
+  cout<<"angle donnees a la camera pan ="<<degre<<endl;  
+  if (degre>180 || degre<0){
     degre = 0;
   }
   pan.setPos(degre);

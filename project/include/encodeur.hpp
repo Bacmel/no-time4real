@@ -7,10 +7,13 @@ class Encodeur{
 private:
     char buff[SIZE];
     int fd;
+    int pas;
+    int angle;
    
 public:
     Encodeur();
     int getStep();
+    int getAngle();
     void closeDeviceFile();
 };
 #endif

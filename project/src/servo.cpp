@@ -17,7 +17,7 @@ Servo::Servo(int pin){
 void Servo::setPos(int angle){
 
   digitalWrite(pin,0);
-  pulse=(angle/18)+2;
+  pulse=(angle*(1820/180))+600;
   left=20000-pulse;
   i=0;
   while(i<35){

@@ -6,9 +6,9 @@ using namespace std;
 
 int main()
 {
-	//Lidar lidar;
+	Lidar lidar;
 	PanTilt pantilt;
-	/*lidar.start();
+	lidar.start();
 	while(1)
 	{
 		sleep(1);
@@ -21,7 +21,6 @@ int main()
 		}
 	}
 	lidar.stop();
-	int step = lidar.getDonnee().step+50;
-	*/pantilt.orientation(50);
+	pantilt.orientation();
 	return 0;
 }
