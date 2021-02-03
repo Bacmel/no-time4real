@@ -7,7 +7,7 @@
 #define CMD_CW               0x02  // commande tourner dans le trigo
 #define CMD_CCW              0x03  // anti-horaire / anti-trigo
 #define M_CHANNEL 1
-#define SPEED 80
+#define SPEED 100
 
 class Moteur{
 private:

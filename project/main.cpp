@@ -1,4 +1,5 @@
 #include "lidar.hpp"
+#include "pantilt.hpp"
 #include <iostream>
 
 using namespace std;
@@ -6,6 +7,7 @@ using namespace std;
 int main()
 {
 	Lidar lidar;
+//	PanTilt pantilt;
 	lidar.start();
 	while(1)
 	{
@@ -18,5 +20,7 @@ int main()
 		}
 	}
 	lidar.stop();
+//	int step = lidar.getStep()+50;
+//	pantilt.orientation(step);
 	return 0;
 }
