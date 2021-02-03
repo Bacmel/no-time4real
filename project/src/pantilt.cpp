@@ -1,10 +1,9 @@
 #include "pantilt.hpp"
 #include <wiringPi.h>
-#include <softPwm.h>
 #include <math.h>
 #include <unistd.h>
 
-PanTilt::PanTilt(): pan(PAN, MIN1, MAX1), tilt(TILT, MIN2, MAX2)
+PanTilt::PanTilt(): pan(PAN), tilt(TILT)
 {
 }
 
@@ -22,5 +21,8 @@ void PanTilt::getImage(int degre)
 
 void PanTilt::orientation(int degre)
 {
-	pan.setPos(degre);
+  if (degre>180 || angle<0){
+    degre = 0;
+  }
+  pan.setPos(degre);
 }
