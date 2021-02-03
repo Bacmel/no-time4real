@@ -1,19 +1,18 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include "opencv2/core/core_c.h"
-#include "opencv2/core/types_c.h"
-#include "opencv2/highgui/highgui_c.h"
-#include "opencv2/videoio/videoio_c.h"
+#include "opencv2/opencv.hpp"
+#include <sstream>
 
 class Camera{
-private:
-  CvCapture* capture;
-  IplImage* frame;
+	private:
+  		cv::VideoCapture camera;
+  		cv::Mat frame;
+  		std::ostringstream oss;
 
-public:
-  Camera();
-  void getPicture();
+	public:
+		Camera();
+  		void getPicture();
 };
 
 #endif

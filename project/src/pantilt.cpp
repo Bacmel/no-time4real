@@ -11,26 +11,27 @@ PanTilt::PanTilt(): pan(PAN), tilt(TILT)
 
 void PanTilt::parisienne()
 {
-	//TODO
-	// Traitement Image
+	inclinaison(UP);
+	camera.getPicture();
+	inclinaison(DOWN);
+	camera.getPicture();
+	inclinaison(UP);
+	camera.getPicture();
+	inclinaison((DOWN+UP)/2);
 }
 
-void PanTilt::getImage(int degre)
+void PanTilt::getImage()
 {
-	//TODO
-	//Photo
+	camera.getPicture();
+}
+
+void PanTilt::inclinaison(int degre)
+{
+	tilt.setPos(degre);
 }
 
 void PanTilt::orientation(int degre)
 {
   degre += 90;
-  if (degre>180)
-  {
-  	degre = 180;	
-  }
-  else if(degre<0)
-  {
-    degre = 0;
-  }
   pan.setPos(degre);
 }

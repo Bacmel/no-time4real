@@ -4,9 +4,6 @@
 class Servo{
 private:
   int pin;
-  int i;
-  int pulse;
-  int left;
   int angle;
 
 public:

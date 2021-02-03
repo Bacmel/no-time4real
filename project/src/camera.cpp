@@ -1,24 +1,19 @@
 #include "camera.hpp"
-#include <iostream>
+#include <ctime>
+#include <iomanip>
+
 using namespace std;
 using namespace cv;
 
 Camera::Camera(){
-  cvNamedWindow("Parisienne", CV_WINDOW_AUTOSIZE);
-  capture = cvCreateCameraCapture(0);
+  camera = VideoCapture(0);
 }
 
 void Camera::getPicture(){
-
-
-  while(1) {
-    frame = cvQueryFrame(capture);
-    cvShowImage("Parisienne", frame);
-
-    if (cvWaitKey(10)>=0){
-      cvReleaseCapture(&capture);
-      cvDestroyWindow( "Test");
-    }
-  }
-
+	camera >> frame;
+	auto t = time(nullptr);
+	oss.clear();
+    oss << "photo/" << put_time(localtime(&t), "%d-%m-%Y_%H-%M-%S") << ".jpg";
+    auto str = oss.str();
+	imwrite(str, frame);
 }

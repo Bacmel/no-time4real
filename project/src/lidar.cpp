@@ -1,5 +1,4 @@
 #include "lidar.hpp"
-#include <iostream>
 
 using namespace std;
 
@@ -18,7 +17,6 @@ void Lidar::update()
 	bool ccw = moteur.estTrigo();
 	if((ccw && step > RANGE/2) || (!ccw && step < -RANGE/2))
 	{
-		cout << "Inverse\n";
 		moteur.inverse();
 	}
 }

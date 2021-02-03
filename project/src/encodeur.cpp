@@ -24,7 +24,7 @@ int Encodeur::getStep()
   if (fd>0){
     read(fd,buff,SIZE);
 }
-  return atoi(buff);
+  return (atoi(buff)+210)%420-210;
 }
 
 int Encodeur::getAngle(){
